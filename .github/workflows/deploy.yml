@@ -18,17 +18,26 @@ jobs:
     - uses: actions/checkout@main
 
       # Log into Azure
+      # Log into Azure using a federated credential. We have already set up the
+    # federation process in a prior step, so we need to pass in the following:
+    # Client ID = Application registration ID
+    # Tenant ID = Application owner organization ID (previously called Tenant ID in Azure)
+    # Subscription ID
     - uses: azure/login@v2.1.1
       with:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         enable-AzPSSession: true
+        # We also need to ensure that enable-AzPSSession is true. This is important for
+          # using OIDC in Azure. If we were to pass in a client secret instead, we would not need
+          # this setting enabled
 
       # Deploy ARM template
     - name: ARM deploy
       uses: azure/arm-deploy@v1
       with:
+        scope: 'resourcegroup'
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ secrets.AZURE_RG }}
         template: ./src/InfrastructureAsCode/main.bicep
