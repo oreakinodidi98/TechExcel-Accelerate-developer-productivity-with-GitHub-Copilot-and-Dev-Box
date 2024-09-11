@@ -111,7 +111,7 @@ jobs:
     needs: deploy-to-test
     environment:
       name: prod
-      url: https://omp5ybxocnuuumpnpreg-prod.azurewebsites.net/
+      url: https://omp5ybxocnuuu-prod.azurewebsites.net/
     
     steps:
     - uses: actions/checkout@v3
@@ -123,5 +123,5 @@ jobs:
 
     - uses: azure/webapps-deploy@v2
       with:
-        app-name: 'omp5ybxocnuuumpnpreg-prod'
+        app-name: 'omp5ybxocnuuu-prod'
         images: omp5ybxocnuuumpnpreg.azurecr.io/techexcel/dotnetcoreapp:${{github.run_number}}
